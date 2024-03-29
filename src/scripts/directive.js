@@ -8,7 +8,16 @@ export default function colorPickerDirective () {
             ngModel: '=',
             options: '=?',
             api: '=?',
-            eventApi: '=?'
+            // Events
+            // `Listener` was added to names to avoid
+            // name conflict with internal listeners
+            onChangeListener:'&onChange',
+            onBlurListener:'&onBlur',
+            onOpenListener:'&onOpen',
+            onCloseListener:'&onClose',
+            onClearListener:'&onClear',
+            onDestroyListener:'&onDestroy',
+            onResetListener:'&onReset',
         },
         bindToController: true,
         templateUrl: 'template/color-picker/directive.html',

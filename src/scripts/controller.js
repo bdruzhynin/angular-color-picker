@@ -408,8 +408,14 @@ export default class AngularColorPickerController {
         // don't fire if it hasn't actually changed
         if (this.internalNgModel !== this.onChangeValue) {
             this.onChangeValue = this.internalNgModel;
+            var color = tinycolor(this.onChangeValue);
 
-            this.eventApiDispatch('onChange', [event]);
+            if (this.isColorValid(color)) {
+                this.updateModel = true;
+                this.update();
+            }
+
+            this.eventApiDispatch('onChange', {event});
         }
     }
 
@@ -421,7 +427,7 @@ export default class AngularColorPickerController {
 
         this.$scope.control[0].$setTouched();
 
-        this.eventApiDispatch('onBlur', [event]);
+        this.eventApiDispatch('onBlur', {event});
 
         // if clicking outside the color picker
         if (this.options.hide.blur && this.find(event.relatedTarget).length === 0) {
@@ -470,7 +476,7 @@ export default class AngularColorPickerController {
                 this.valueUpdate(this.basicEventTypes[i]);
             }
 
-            this.eventApiDispatch('onOpen', [event]);
+            this.eventApiDispatch('onOpen', {event});
         };
 
         this.api.close = (event) => {
@@ -480,21 +486,21 @@ export default class AngularColorPickerController {
                 this.$scope.$applyAsync();
 
                 this.update();
-                this.eventApiDispatch('onClose', [event]);
+                this.eventApiDispatch('onClose', {event});
             }
         };
 
         this.api.clear = (event) => {
             this.setNgModel(null);
 
-            this.eventApiDispatch('onClear', [event]);
+            this.eventApiDispatch('onClear', {event});
         };
 
         this.api.reset = (event) => {
             if (this.internalNgModel !== this.initialNgModel) {
                 this.setNgModel(this.initialNgModel);
 
-                this.eventApiDispatch('onReset', [event]);
+                this.eventApiDispatch('onReset', {event});
             }
         };
 
@@ -1054,16 +1060,12 @@ export default class AngularColorPickerController {
         return Math.round((1 - ((eventPos.pageY - this.offset(el).top) / el.prop('offsetHeight'))) * multiplier);
     }
 
-    eventApiDispatch(name, args) {
-        if (this.eventApi && typeof this.eventApi[name] === 'function') {
-            if (!args) {
-                args = [];
-            }
-
-            args.unshift(this.internalNgModel);
-            args.unshift(this.api);
-
-            this.eventApi[name].apply(this, args);
+    eventApiDispatch(name, args = {}) {
+        let listenerName = `${name}Listener`;
+        if (this[listenerName] && typeof this[listenerName] === 'function') {
+            args.color = this.internalNgModel;
+            args.api = this.api;
+            this.eventApi[`${name}Listener`](args);
         }
     }
 

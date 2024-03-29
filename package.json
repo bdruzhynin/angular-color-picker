@@ -38,6 +38,7 @@
   },
   "scripts": {
     "pretest": "./node_modules/.bin/webdriver-manager update --standalone",
-    "test": "./node_modules/.bin/protractor ./test/protractor-config.js"
+    "test": "./node_modules/.bin/protractor ./test/protractor-config.js",
+    "build": "grunt build"
   }
 }

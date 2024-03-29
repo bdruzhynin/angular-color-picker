@@ -68,6 +68,13 @@ HTML - Only ```ng-model``` is required. If supplying an api it must be a unique 
     options="options"
     api="api"
     event-api="eventApi"
+    on-change="handler(api, color, $event)"
+    on-blur="handler(api, color, $event)"
+    on-open="handler(api, color, $event)"
+    on-close="handler(api, color, $event)"
+    on-clear="handler(api, color, $event)"
+    on-destroy="handler(api, color, $event)"
+    on-reset="handler(api, color)"
 ></color-picker>
 ```
 Javascript
@@ -145,17 +152,6 @@ $scope.api.clear();      // removes value
 $scope.api.reset();      // resets color value to original value
 $scope.api.getElement(); // returns the wrapping <color-picker> element
 $scope.api.getScope();   // returns the color picker $scope
-
-// api event handlers
-$scope.eventApi = {
-    onChange:  function(api, color, $event) {},
-    onBlur:    function(api, color, $event) {},
-    onOpen:    function(api, color, $event) {},
-    onClose:   function(api, color, $event) {},
-    onClear:   function(api, color, $event) {},
-    onReset:   function(api, color, $event) {},
-    onDestroy: function(api, color) {},
-};
 
 // decorator - all variables in options can be globally overridden here
 angular
